@@ -6,6 +6,7 @@ import Events from "./components/Events";
 
 //Styles
 import "./App.css";
+import Challeng from "./components/Challeng";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <TempExpressionsComponent />
       <MyComponent />
       <Events />
+      <Challeng />
     </div>
   );
 }
