@@ -1,16 +1,22 @@
-import { useState } from "react";
-
 //imagens
 import ImgAssets from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 
 //styles
 import "./App.css";
+
+//components
 import ManageData from "./components/ManageData";
 import ListRender from "./components/ListRender";
 import CondicionalRender from "./components/CondicionalRender";
 import ShowUsername from "./components/ShowUsername";
 import CarDetails from "./components/CarDetails";
+import FragmentComponent from "./components/FragmentComponent";
+import Container from "./components/Container";
+import ExecuteFunction from "./components/ExecuteFunction";
+import Message from "./components/Message";
+import { useState } from "react";
+import StateLiftMessage from "./components/StateLiftMessage";
+import UserDetails from "./components/UserDetails";
 
 function App() {
   const nomeUsuario = "Carlos";
@@ -39,6 +45,37 @@ function App() {
     },
   ];
 
+  const users = [
+    {
+      id: 1,
+      nome: "Carlos",
+      idade: 19,
+      profissao: "Dev Frontend",
+    },
+    {
+      id: 2,
+      nome: "Emanuel",
+      idade: 10,
+      profissao: "Dev Backend",
+    },
+    {
+      id: 3,
+      nome: "Pinho",
+      idade: 23,
+      profissao: "Dev Full-Stack",
+    },
+  ];
+
+  const showMessage = () => {
+    console.log("Ativou Evento do Pai!");
+  };
+
+  const [message, setMessage] = useState("");
+
+  const gerarMensagem = (msg) => {
+    setMessage(msg);
+  };
+
   return (
     <div>
       <h1>Seção 3</h1>
@@ -58,11 +95,29 @@ function App() {
       <ShowUsername nome={nomeUsuario} idade={19} />
       {carros.map((carro) => (
         <CarDetails
+          key={carro.id}
           marca={carro.marca}
           ano={carro.ano}
           km={carro.km}
           novo={carro.novo}
-          id={carro.id}
+        />
+      ))}
+      <FragmentComponent />
+      <Container>
+        <p>Este é o conteudo</p>
+      </Container>
+
+      <ExecuteFunction myFunction={showMessage} />
+
+      <Message msg={message} />
+      <StateLiftMessage gerarMensagem={gerarMensagem} />
+      <h1>Atividade Seção 3</h1>
+      {users.map((user) => (
+        <UserDetails
+          key={user.id}
+          nome={user.nome}
+          idade={user.idade}
+          profissao={user.profissao}
         />
       ))}
     </div>
