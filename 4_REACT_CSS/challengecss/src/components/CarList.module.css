@@ -1,0 +1,11 @@
+.box_car {
+    border: 3px solid rgb(103, 103, 117);
+    border-radius: 10px;
+    margin: 10px;
+    position: relative;
+    width: 30%;
+}
+
+.title_Car {
+    color: orange;
+}

@@ -1,20 +1,24 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica;
+
+}
+
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
-.redTitle {
-  color: red;
-  background-color: black;
+.Area_lista {
+  width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
-
-.title {
-  color: white;
-  background-color: black;
-}
-
 
 .logo {
   height: 6em;
@@ -51,3 +55,5 @@
 .read-the-docs {
   color: #888;
 }
+
+
