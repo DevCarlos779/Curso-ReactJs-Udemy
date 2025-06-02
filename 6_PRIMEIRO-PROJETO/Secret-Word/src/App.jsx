@@ -26,6 +26,11 @@ function App() {
   const [pickedWord, setPickedWord] = useState("");
   const [letters, setLetters] = useState("");
 
+  const [letrasAcertadas, setLetrasAcertadas] = useState([]);
+  const [letrasErradas, setLetrasErradas] = useState([]);
+  const [tentativas, setTentativas] = useState(3);
+  const [pontos, setPontos] = useState(0);
+
   //Escolhe uma categoria e uma palavra aleatoriamente
   const pickWordAndCategory = () => {
     //escolhendo categoria
@@ -48,7 +53,6 @@ function App() {
 
     //criando um array com as letras da palavra
     let wordLetters = word.split("");
-    console.log(wordLetters);
 
     //tranformando letras maiusculas em minusculas
     wordLetters = wordLetters.map((letter) => letter.toLowerCase());
@@ -63,12 +67,55 @@ function App() {
   };
 
   //verifica a letra
-  const verifyLetter = () => {
-    setGameStage(stages[2].name);
+  const verifyLetter = (letter) => {
+    const normalizedLetter = letter.toLowerCase();
+
+    //verifica se a letra ja foi utilizada:
+
+    if (
+      letrasAcertadas.includes(normalizedLetter) ||
+      letrasErradas.includes(normalizedLetter)
+    ) {
+      return;
+    }
+
+    //verifica se é uma letra certa ou errada:
+
+    if (letters.includes(normalizedLetter)) {
+      setLetrasAcertadas((actualLetrasAcertadas) => [
+        ...actualLetrasAcertadas,
+        normalizedLetter,
+      ]);
+    } else {
+      setLetrasErradas((actualLetrasErradas) => [
+        ...actualLetrasErradas,
+        normalizedLetter,
+      ]);
+
+      setTentativas((actualTentativas) => actualTentativas - 1);
+    }
   };
+
+  const clearLetterStates = () => {
+    setLetrasAcertadas([]);
+    setLetrasErradas([]);
+  };
+
+  useEffect(() => {
+    if (tentativas <= 0) {
+      //resetando os arrays de letras:
+      clearLetterStates();
+
+      setGameStage(stages[2].name);
+    }
+  }, [tentativas]);
 
   //Resetar o Jogo
   const retry = () => {
+    //resetando pontos e tentativas
+    setPontos(0);
+    setTentativas(3);
+
     setGameStage(stages[0].name);
   };
 
@@ -77,8 +124,19 @@ function App() {
       {gameStage === "start" && (
         <StartScreen startGame={startAndConfigureGame} />
       )}
-      {gameStage === "game" && <Game verifyLetter={verifyLetter} />}
-      {gameStage === "end" && <GameOver retry={retry} />}
+      {gameStage === "game" && (
+        <Game
+          verifyLetter={verifyLetter}
+          pickedWord={pickedWord}
+          pickedCategory={pickedCategory}
+          letters={letters}
+          letrasAcertadas={letrasAcertadas}
+          letrasErradas={letrasErradas}
+          tentativas={tentativas}
+          pontos={pontos}
+        />
+      )}
+      {gameStage === "end" && <GameOver retry={retry} pontos={pontos} />}
     </div>
   );
 }
