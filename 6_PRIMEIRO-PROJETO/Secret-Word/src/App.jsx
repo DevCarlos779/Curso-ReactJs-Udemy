@@ -32,7 +32,7 @@ function App() {
   const [pontos, setPontos] = useState(0);
 
   //Escolhe uma categoria e uma palavra aleatoriamente
-  const pickWordAndCategory = () => {
+  const pickWordAndCategory = useCallback(() => {
     //escolhendo categoria
     const allCategories = Object.keys(words);
     const category =
@@ -44,10 +44,12 @@ function App() {
 
     //passando a palavra e a categoria com retorno da função
     return [category, word];
-  };
+  }, [words]);
 
   //Inicia o Jogo
-  const startAndConfigureGame = () => {
+  const startAndConfigureGame = useCallback(() => {
+    clearLetterStates();
+    setTentativas(3);
     //pegando os returns da função
     const [category, word] = pickWordAndCategory();
 
@@ -64,8 +66,7 @@ function App() {
 
     //chama a tela de jogo
     setGameStage(stages[1].name);
-  };
-
+  }, [pickWordAndCategory]);
   //verifica a letra
   const verifyLetter = (letter) => {
     const normalizedLetter = letter.toLowerCase();
@@ -101,6 +102,7 @@ function App() {
     setLetrasErradas([]);
   };
 
+  //monitorando as tentativas
   useEffect(() => {
     if (tentativas <= 0) {
       //resetando os arrays de letras:
@@ -109,6 +111,17 @@ function App() {
       setGameStage(stages[2].name);
     }
   }, [tentativas]);
+
+  //monitorando as letras acertadas
+  useEffect(() => {
+    const uniqueLetters = [...new Set(letters)];
+
+    if (letrasAcertadas.length == uniqueLetters.length) {
+      //venceu
+      setPontos((actualPontos) => (actualPontos += 100));
+      startAndConfigureGame();
+    }
+  }, [letrasAcertadas]);
 
   //Resetar o Jogo
   const retry = () => {
