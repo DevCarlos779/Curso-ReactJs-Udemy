@@ -1,1 +1,112 @@
+//organinzando a api
 1) pegar o arquivo que contem as palavras no github
+2) instalar os pacotes do json server -> npm install json-server
+3) criar um comando para abrir a api do arquivo da lista de palavras
+
+//comandos gerais
+4) Resetar os arquivos do react (css e tals)
+5) Definir html e body como width 100% no index.css e zerar as margins do body
+6) Definir o flex para a classe .App (div principal) para que ela e seus elementos filhos
+fique sempre ao centro
+
+//funcionamento inicial do site
+7) importar o arquivo de palavras para o app.jsx -> import { wordsList } from "./data/words";
+
+8) criar um state do objeto que é retornado do arquivo de palavras alimentado com o import do arquivo que visemos no App.jsx -> const [words] = useState(wordsList);
+
+9) criar um array de objetos que armazena 3 objetos, com id e nome, cada objeto desse é um estagio do nosso jogo
+
+10) criamos um state chamado gameStage que recebe como valor inicial o objeto posicionado no indice 0 do nosso array de estagios do jogo (estagio inicial)
+
+11) criamos os components e os css de cada estagio do jogo
+
+12) criamos um sistema que imita o router usando ifs dentro do App.jsx, se o estagio do jogo for tal, o componente que será mostrado será o tal
+
+13) criamos uma função para cada estagio do jogo dentro do App.jsx, cada função será passada por meio da props do seu respectivo componente
+
+//Primeiro componente (Estagio um do jogo)
+14) Esse primeiro componente é a tela inicial do jogo, com o botão de jogar, ela será responsavel nao somente por jogar o usuario para a tela de jogatina, mas também para: resetar a pontuação, resetar o state de letras ja acertadas e erradas, e zerar as vidas do usuario!
+
+15) esse componente tem basicamente o nome do jogo e um botão de começar, que ao ser clicado ativa a função startAndConfigureGame que foi passada como props
+
+16) Antes de começar a lhe explicar sobre essa função, voce precisa entender como nosso jogo funciona. O jogo tem 5 useStates principais relacionados as palavras:
+    1º pickedCategory, esse state guarda a categoria de palavra a qual a palavra sorteda deverá participar
+
+    2º pickedWord, esse state guarda a palavra que será escolhida aleatoriamente pelo sistema
+
+    3º letters, esse state contem um array com todas as letras da palavra
+
+    4º letrasAcertadas, esse state contém todas as letras que o usuario ja acertou da palavra
+
+    5ºletrasErradas, esse state contem todas as letras que o usuario ja errou tentando acertar a palavra
+
+Como eu já haiva lhe falado antes, a tela inicial tem também a função de resetar os estados do jogo, para fazer isso, primeiramente a função startAndConfigureGame chama duas outras funções criadas: clearLetterStates() que reseta os states de letrasAcertadas e letrasErradas, e a função setTentativas(3) que reseta as vidas do usuario
+
+17)em seguida o jogo precisa escolher a categoria e a palavra aleatoriamente, para fazer isso chamamos a função pickWordAndCategory() que é basicamente responsavel por fazer a logica de sortear a palavra e a categoria. Essa função tem dois returns, que são: category (categoria escolhida) e word (palavra escohida), e para receber esses dois returns usamos uma desestruturação, pegando os valores dessas duas variaveis de dentro da função pickWordAndCategory() e trazendo par dentro da startAndConfigureGame();
+
+18) logo em seguida, ela cria uma variavel (wordLetters) que vai conter um array com todas as letras da palavra escolhida, usando um função nativa chamada split();
+
+19) entretanto, as palavras começam com letra maiuscula e o javascript tem caseSentitivy. Então para resolver isso, percorremos cada letra do array de letras e damos um toLowerCase() em cada uma delas e armazenamos esse novo array de letras minusculas dentro do proprio array de letras (wordLetters), tornando-o agora um array de letras minusculas
+
+20) Agora, setamos os states ja citados antes (pickedCategory, pickedWord e letters) com as informações que coletamos (category, word e wordLetters) durante a execução da função
+
+21) Por fim, a função startAndConfigureGame() seta o state do gameStage para o estagio de indice 1 (tela de jogatina)
+
+//Segundo componente (Estagio dois do jogo)
+
+22) Ao iniciar o segundo estagio do jogo, passamos como props:
+
+    a função desse estagio -> verifyLetter()
+
+    o state da categoria escolhida -> pickedCategory
+
+    o estate da palavra escolhida -> pickedWord
+
+    o state de array de letras da palavra -> letters
+
+    o state de letras acertadas -> letrasAcertadas
+
+    o state de letras Erradas -> letrasErradas
+
+    o state de tentativas -> tentativas
+
+    o state de pontos -> pontos
+
+23) Esse componente do jogo é o mais complexo, ele é composto por:
+
+    um <p> que informa a pontuação do usuario de acordo com a props de pontos
+
+    um <h3> que da a dica da palavra, que no caso é a sua categoria de acordo com a props de categoria
+
+    um <p> que informa a quantidade de vidas do jogador de acordo com a props de tentativas
+
+    uma div que dentro dela tem um jsx que faz um map no array de letras passdo por props, percorrendo cada letra e fazendo um if que verifica se a letra esta contida no array de letras que o usuario ja acertou:
+
+        caso esse letra da palavra esteja no state de letras que o usuario ja acertou, a letra é mostrada na tela no seu respesctivo quadrado branco
+
+        caso essa letra da palavra não esteja no state de letras que o usuario acertou, a letra não será mostrada, somente o quadrado branco
+    
+    um form com um input para o usuario digitar a letra que deseja adivinhar (essa letra é armazenada em um state chamado letter, esse state monitora e muda a letra de acordo com o onChange do input) e um button que aciona o onSubmit do formulário, que por sua vez, executa a função handleSubmit(), que é criada acima do componente. A seguir, irei explicar sobre essa função:
+
+        primeiramente ela pega o evento como parametro e executa a função nativa .preventDefault() que impede que a pagina recarregue ao enviar o form
+
+        logo em seguida, ela chama a função verifyLetter(letter) passando o state letter que é a letra digitada pelo usuario como parametro.
+
+            A função verifyLetter() primeiramente tranforma a letter que recebeu como parametro para letra minuscula usando o toLowerCase(), e armazena em uma variavel chamada normalizedLetter. Esse procedimento garante que independente do usuario digitar a letra maiuscula ou minuscula, o programa irá verificar de maneira correta!
+
+            Em seguida, a função verifyLetter() faz um if para verificar se a normalizedLetter nao está contida no array de letraAcertadas ou no de letrasErradas. Esse procedimento verifica se a letra digitada peo usuario ja não foi digitada/usada antes, evitando com que ele jogue duas vezes a mesma letra. Caso ele ja tenha jogado, o if da um return vazio, sem fazer nada!
+
+            Depois, ela faz um if que verifica se a normalizedLetter está contida no array de letras que compõem a palavra.
+            Caso esteja, ela seta um novo array de letras acertadas no state de letraAcertadas, esse array contem todo conteudo que o array antigo do state já tinha mais a normalizedLetter. Consequentemente, como o jogo mostra todas as letras que estão no state de letrasAcertadas, a letra que o usuario acertou será mostrada na tela.
+            Caso não esteja, ela seta um novo array de letras erradas no state de letraErradas, esse array contem todo conteudo que o array antigo do state já tinha mais a normalizedLetter. E por fim, ela modifica o state de vidas do usuario, pegando o state antigo - 1, gerando assim um novo valor.
+
+        Após a execução da função verifyLetter() acabar, o jogo seta o state de letter que é a letra digitada pelo usuario como vazio, fazendo assim com que o input fica zerado como no inicio.
+
+        Por ultimo, a função handleSubmit() da um focus no input, para que o usuario fique pronto para digitar outra letra sem ter que clicar no input novamente!
+    
+    O ultimo elemento do componente do estagio da jogatina é uma div que contém spans dinamicos de todas as letras que o usuarios errou, eles são gerados a partir de um map no state de letraErradas, imprimindo cada uma delas em um span.
+
+//Lógica de continuidade do jogo (mudar de palavra após acertar a palavra anterior completa)
+
+    Isso é bem simples, dentro do componente App.jsx criamos um useEffect que monitora o array de letraAcertadas
+
