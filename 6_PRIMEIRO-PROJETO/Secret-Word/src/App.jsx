@@ -127,7 +127,6 @@ function App() {
   const retry = () => {
     //resetando pontos e tentativas
     setPontos(0);
-    setTentativas(3);
 
     setGameStage(stages[0].name);
   };

@@ -108,5 +108,28 @@ Como eu já haiva lhe falado antes, a tela inicial tem também a função de res
 
 //Lógica de continuidade do jogo (mudar de palavra após acertar a palavra anterior completa)
 
-    Isso é bem simples, dentro do componente App.jsx criamos um useEffect que monitora o array de letraAcertadas
+    Isso é bem simples, dentro do componente App.jsx criamos um useEffect que monitora o array de letraAcertadas e toda vez que o usuario acerta uma letra e o state é modificado, esse useEffect é acionado.
 
+        Primeiramente ele cria uma varaivel que armazena um set que é basicamente uma array só que sem elementos de valores repetidos, e ele cria esse array com base no array do state de letters da palavra que o usuario está tentando adivinhar. Logo, o novo array criado e armazenado dentro da variavel uniqueLetters contém todas as letras da palavras, mas sem que elas se repitam, exemplos:
+            letters = ["b", "a", "n", "a", "n", "a"] -> uniqueLetters = ["b", "a", "n"]
+        
+        Logo em seguida, esse useEffect faz um if que verifica se o tamanho do array de uniqueLetters é igual ao tamanho do array de letrasAcertadas.
+        Caso seja, significa que o usuario já acertou todas as letras da palavra. Então o jogo seta o state de ponsto do usuario para a quatidade de pontos atual + 100. E logo em Seguida executa a função startAndConfigureGame() para zerar o state de palavras acertadas, palavras erradas, o de vidas e escolher uma nova categoria e uma nova palavra para o jogo continuar.
+
+//Lógica de fim do jogo (quando o usuario perde todas as vidas)    
+
+    Já sabemos que a função verifyLetter é chamad quando o usuario envia uma letra, e se essa letra estiver errada, a função seta as vidas do usuario - 1.
+
+    Logo, tudo que temos que fazer é criar um useEffect que monitore o numero de vidas/tentativas do usuario e dentro desse useEffect fazemos um if para verificar se o state de vidas do usuario é <= 0.
+    Caso seja, ele chama a função clearLetterStates() para zerar os states de letrasAcertadas e letrasErradas. Por fim, o useEffect seta o state de estagio d jogo para o estagio de gameOver, mudando de tela.
+
+//Terceiro componente (Estagio três do jogo)
+
+    Esse componente é bem simples, ele passa a função retry() e o state de pontso do usuario como prosps.
+
+    Esse componente conta com:
+    Uma mensagem de fim de jogo
+    um <h2> com a pontuação final do usuario, passada por prosps
+    um <button> que chama a função retry, passada por props
+
+    Ao ser chamada, a função retry() basicamente zera o state de pontos do usuario e seta o state de gameStage do jogo para 0 (tela inicial)
