@@ -44,6 +44,21 @@
       "id": "b0ef",
       "name": "teste",
       "price": "12312"
+    },
+    {
+      "id": "9dbb",
+      "name": "ola",
+      "price": "12"
+    },
+    {
+      "id": "b61d",
+      "name": "ola",
+      "price": "12"
+    },
+    {
+      "id": "091b",
+      "name": "cabo hdmi",
+      "price": "10"
     }
   ]
 }

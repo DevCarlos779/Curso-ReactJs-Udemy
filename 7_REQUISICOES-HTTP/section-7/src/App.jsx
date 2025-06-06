@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useFetch } from "./hooks/useFetch";
 
 //styles
 import "./App.css";
@@ -11,6 +12,9 @@ function App() {
 
   //url da api
   const url = "http://localhost:3000/products";
+
+  //fazendo fetch usando o hook custom
+  const { data, httpConfig, loading } = useFetch(url);
 
   //uso use efect para fazer a requisição apenas uma vez
   useEffect(() => {
@@ -50,20 +54,24 @@ function App() {
     console.log(product);
 
     //faço a requisição e passo um objeto de configurações para o fetch
-    const res = await fetch(url, {
-      //metodo post (enviar)
-      method: "POST",
-      //tipo de arquivo (json)
-      headers: {
-        "Content-Type": "application/json",
-      },
-      //conteudo do arquivo (meu objeto produto convertido em json)
-      body: JSON.stringify(product),
-    });
+    // const res = await fetch(url, {
+    //   //metodo post (enviar)
+    //   method: "POST",
+    //   //tipo de arquivo (json)
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   //conteudo do arquivo (meu objeto produto convertido em json)
+    //   body: JSON.stringify(product),
+    // });
+
+    // 5 - refatorando o POST:
+
+    httpConfig(product, "POST");
 
     //carregamento dinamico de dados
-    const addedProduct = await res.json();
-    setProdutos((prevProdutos) => [...prevProdutos, addedProduct]);
+    // const addedProduct = await res.json();
+    // setProdutos((prevProdutos) => [...prevProdutos, addedProduct]);
 
     setNome("");
     setPreco("");
@@ -71,18 +79,30 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Lista de Produtos</h1>
-      <ul>
-        {produtos.length > 0 ? (
-          produtos.map((produto) => (
-            <li key={produto.id}>
-              Nome: {produto.name} || Preço: R${produto.price}
-            </li>
-          ))
-        ) : (
-          <p>Não há produtos!</p>
-        )}
-      </ul>
+      <h1>Lista de Produtos (Fetch Normal)</h1>
+      {loading && <p>Carregnado Dados!</p>}
+      {!loading && (
+        <ul>
+          {produtos.length > 0 &&
+            produtos.map((produto) => (
+              <li key={produto.id}>
+                Nome: {produto.name} || Preço: R${produto.price}
+              </li>
+            ))}
+        </ul>
+      )}
+      <h1>Lista de Produtos (Fetch usando hook)</h1>
+      {loading && <p>Carregnado Dados!</p>}
+      {!loading && (
+        <ul>
+          {data &&
+            data.map((produto) => (
+              <li key={produto.id}>
+                Nome: {produto.name} || Preço: R${produto.price}
+              </li>
+            ))}
+        </ul>
+      )}
       <div className="add_product">
         <form onSubmit={handleOnChange}>
           <label>
