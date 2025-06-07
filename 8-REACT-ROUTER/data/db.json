@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Cabo HDMI",
+      "price": 15.00
+    },
+    {
+      "id": 2,
+      "name": "Cabo Energia",
+      "price": 12.00
+    },
+    {
+      "id": 3,
+      "name": "Monitor",
+      "price": 900.00
+    }
+  ]
+}

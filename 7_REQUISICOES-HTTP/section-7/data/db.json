@@ -1,64 +1,14 @@
 {
   "products": [
     {
-      "id": "1",
-      "name": "Camisa",
-      "price": 59.9
-    },
-    {
-      "id": "2",
-      "name": "Calça vermelha",
-      "price": 90
-    },
-    {
-      "id": "3",
-      "name": "Boné aba reta",
-      "price": 29.9
-    },
-    {
-      "id": "e73a",
-      "name": "",
-      "price": ""
-    },
-    {
-      "id": "aace",
-      "name": "",
-      "price": ""
-    },
-    {
-      "id": "e356",
-      "name": "",
-      "price": ""
-    },
-    {
-      "id": "df9e",
-      "name": "teste",
-      "price": "112"
-    },
-    {
-      "id": "e7ca",
-      "name": "teste",
-      "price": "112"
-    },
-    {
-      "id": "b0ef",
-      "name": "teste",
+      "id": "e3d0",
+      "name": "asdas",
       "price": "12312"
     },
     {
-      "id": "9dbb",
-      "name": "ola",
-      "price": "12"
-    },
-    {
-      "id": "b61d",
-      "name": "ola",
-      "price": "12"
-    },
-    {
-      "id": "091b",
-      "name": "cabo hdmi",
-      "price": "10"
+      "id": "b9b7",
+      "name": "dasdas",
+      "price": "12321"
     }
   ]
 }

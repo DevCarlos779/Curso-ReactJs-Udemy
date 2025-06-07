@@ -3,6 +3,7 @@ import { useFetch } from "./hooks/useFetch";
 
 //styles
 import "./App.css";
+import Product from "./components/Product";
 
 function App() {
   //crio o elemento que vai receber o array de objetos dos produtos
@@ -14,27 +15,7 @@ function App() {
   const url = "http://localhost:3000/products";
 
   //fazendo fetch usando o hook custom
-  const { data, httpConfig, loading } = useFetch(url);
-
-  //uso use efect para fazer a requisição apenas uma vez
-  useEffect(() => {
-    //crio uma função assincrona que vai esperar cada etapa da requisição
-    async function fetchData() {
-      //executo a requisição e guardo a resposta em res
-      const res = await fetch(url);
-
-      //a resposta que está em res está em string, crio uma variavel data que
-      //recebe o valor da res é json
-      const data = await res.json();
-
-      //seto produtos como a resposta da minha requisição (array de objetos)
-      setProdutos(data);
-    }
-
-    fetchData();
-  }, []);
-
-  console.log(produtos);
+  const { data, httpConfig, loading, error, httpConfigDelete } = useFetch(url);
 
   //Adicionando novo produto
   //primeiramente crio os useState de nome e produto para os inputs
@@ -77,29 +58,25 @@ function App() {
     setPreco("");
   };
 
+  const removeProduct = (id) => {
+    httpConfigDelete("DELETE", id);
+  };
+
   return (
     <div className="App">
-      <h1>Lista de Produtos (Fetch Normal)</h1>
-      {loading && <p>Carregnado Dados!</p>}
-      {!loading && (
-        <ul>
-          {produtos.length > 0 &&
-            produtos.map((produto) => (
-              <li key={produto.id}>
-                Nome: {produto.name} || Preço: R${produto.price}
-              </li>
-            ))}
-        </ul>
-      )}
       <h1>Lista de Produtos (Fetch usando hook)</h1>
-      {loading && <p>Carregnado Dados!</p>}
-      {!loading && (
+      {error && <p>{error}</p>}
+      {loading && <p>Carregando Dados!</p>}
+      {!error && (
         <ul>
           {data &&
             data.map((produto) => (
-              <li key={produto.id}>
-                Nome: {produto.name} || Preço: R${produto.price}
-              </li>
+              <Product
+                id={produto.id}
+                nome={produto.name}
+                preco={produto.price}
+                removeProduct={removeProduct}
+              />
             ))}
         </ul>
       )}
@@ -123,7 +100,10 @@ function App() {
               onChange={(e) => setPreco(e.target.value)}
             />
           </label>
-          <input id="btn_enviar" type="submit" value="Criar" />
+          {loading && (
+            <input id="btn_enviar" type="submit" disable value="Aguarde" />
+          )}
+          {!loading && <input id="btn_enviar" type="submit" value="Criar" />}
         </form>
       </div>
     </div>
