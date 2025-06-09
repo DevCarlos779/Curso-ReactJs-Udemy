@@ -18,6 +18,12 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.active {
+  background-color: black;
+  padding: 10px;
+  color: #fff;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
