@@ -15,4 +15,4 @@ const app = initializeApp(firebaseConfig);
 //banco de dados
 const db = getFirestore(app);
 
-export { db };
+export { db, app };
